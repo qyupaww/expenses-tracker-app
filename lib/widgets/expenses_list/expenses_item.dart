@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../../models/expense.dart';
 
@@ -20,20 +19,24 @@ class ExpenseItem extends StatelessWidget {
           vertical: 16,
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(expense.title),
+            Text(
+              expense.title,
+              style: TextStyle(fontWeight: FontWeight.w500),
+            ),
             const SizedBox(height: 4),
             Row(
               children: [
                 Text(
-                  formatRupiah(expense.amount),
+                  expense.formatRupiah(expense.amount),
                 ),
                 const Spacer(),
                 Row(
                   children: [
-                    Icon(Icons.alarm),
+                    Icon(categoryIcons[expense.category]),
                     const SizedBox(width: 8),
-                    Text(DateFormat.yMd().format(expense.date))
+                    Text(expense.formattedDate),
                   ],
                 ),
               ],
@@ -43,12 +46,4 @@ class ExpenseItem extends StatelessWidget {
       ),
     );
   }
-}
-
-String formatRupiah(num value) {
-  return NumberFormat.currency(
-    locale: 'id_ID',
-    symbol: 'Rp ',
-    decimalDigits: 0,
-  ).format(value);
 }

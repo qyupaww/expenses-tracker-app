@@ -24,12 +24,46 @@ class _ExpensesState extends State<Expenses> {
         category: Category.food),
   ];
 
+  void _openAddExpenseOverLay() {
+    showModalBottomSheet(
+        context: context, builder: (ctx) => Text('Modal Bottom Sheet'));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Flutter Expense Tracker',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white70,
+          ),
+        ),
+        backgroundColor: Colors.teal,
+        actions: [
+          IconButton(
+            onPressed: _openAddExpenseOverLay,
+            icon: const Icon(
+              Icons.add,
+              color: Colors.white70,
+            ),
+          ),
+        ],
+      ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("The Chart"),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            child: Text(
+              "The Chart",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ),
           Expanded(child: ExpensesList(expenses: _registeredExpenses)),
         ],
       ),

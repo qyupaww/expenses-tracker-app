@@ -1,8 +1,19 @@
+import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
+import 'package:intl/intl.dart';
 
 const uuid = Uuid();
 
+final formatter = DateFormat.yMd();
+
 enum Category { food, shopee, game, others }
+
+const categoryIcons = {
+  Category.food: Icons.lunch_dining,
+  Category.shopee: Icons.shopping_bag,
+  Category.game: Icons.gamepad,
+  Category.others: Icons.money,
+};
 
 class Expense {
   Expense({
@@ -17,4 +28,14 @@ class Expense {
   final double amount;
   final DateTime date;
   final Category category;
+
+  String get formattedDate => formatter.format(date);
+
+  String formatRupiah(num value) {
+    return NumberFormat.currency(
+      locale: 'id_ID',
+      symbol: 'Rp ',
+      decimalDigits: 0,
+    ).format(value);
+  }
 }
