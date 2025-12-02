@@ -11,6 +11,17 @@ class _NewExpenseState extends State<NewExpense> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
 
+  void _presentDatePicker() {
+    final now = DateTime.now();
+    final firstDate = DateTime(now.year - 1, now.month, now.day);
+    final lastDate = DateTime(now.year + 1, now.month, now.day);
+    showDatePicker(
+        context: context,
+        initialDate: now,
+        firstDate: firstDate,
+        lastDate: lastDate);
+  }
+
   @override
   void dispose() {
     _titleController.dispose();
@@ -31,14 +42,32 @@ class _NewExpenseState extends State<NewExpense> {
               label: Text('Title'),
             ),
           ),
-          TextField(
-            controller: _amountController,
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(
-              prefixText: 'Rp ',
-              label: Text('Amount'),
+          Row(children: [
+            Expanded(
+              child: TextField(
+                controller: _amountController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  prefixText: 'Rp ',
+                  label: Text('Amount'),
+                ),
+              ),
             ),
-          ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text('Selected Date'),
+                  IconButton(
+                    onPressed: _presentDatePicker,
+                    icon: const Icon(Icons.calendar_month),
+                  ),
+                ],
+              ),
+            ),
+          ]),
           SizedBox(height: 16),
           Row(
             children: [
@@ -50,7 +79,12 @@ class _NewExpenseState extends State<NewExpense> {
                 child: const Text('Save Expense'),
               ),
               const Spacer(),
-              TextButton(onPressed: () {}, child: Text('Cancel')),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Cancel'),
+              ),
             ],
           ),
         ],
