@@ -27,7 +27,18 @@ class _ExpensesState extends State<Expenses> {
 
   void _openAddExpenseOverLay() {
     showModalBottomSheet(
-        context: context, builder: (ctx) => const NewExpense());
+      context: context,
+      builder: (ctx) => NewExpense(
+        onAddExpense: _addExpenses,
+      ),
+    );
+  }
+
+  void _addExpenses(Expense expense) {
+    setState(() {
+      _registeredExpenses.add(expense);
+      Navigator.pop(context);
+    });
   }
 
   @override
@@ -59,7 +70,7 @@ class _ExpensesState extends State<Expenses> {
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             child: Text(
               "The Chart",
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w400,
               ),

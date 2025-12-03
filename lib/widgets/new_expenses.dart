@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../models/expense.dart';
 
 class NewExpense extends StatefulWidget {
-  const NewExpense({super.key});
+  const NewExpense({required this.onAddExpense, super.key});
+
+  final void Function(Expense expense) onAddExpense;
 
   @override
   State<NewExpense> createState() => _NewExpenseState();
@@ -13,6 +16,7 @@ class _NewExpenseState extends State<NewExpense> {
   final _amountController = TextEditingController();
   DateTime? _selectedDate;
   Category _selectedCategory = Category.others;
+  final formatter = DateFormat('dd/MM/yyyy');
 
   Future<void> _presentDatePicker() async {
     final now = DateTime.now();
@@ -22,9 +26,11 @@ class _NewExpenseState extends State<NewExpense> {
         initialDate: now,
         firstDate: firstDate,
         lastDate: now);
-    setState(() {
-      _selectedDate = pickedDate;
-    });
+    if (pickedDate != null) {
+      setState(() {
+        _selectedDate = pickedDate;
+      });
+    }
   }
 
   void _submitExpenseData() {
@@ -49,7 +55,13 @@ class _NewExpenseState extends State<NewExpense> {
           ],
         ),
       );
+      return;
     }
+    widget.onAddExpense(Expense(
+        title: _titleController.text,
+        amount: enteredAmount,
+        date: _selectedDate!,
+        category: _selectedCategory));
   }
 
   @override
@@ -132,7 +144,7 @@ class _NewExpenseState extends State<NewExpense> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: Text('Cancel'),
+                child: const Text('Cancel'),
               ),
             ],
           ),
