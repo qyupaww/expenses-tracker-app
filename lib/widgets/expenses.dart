@@ -85,7 +85,6 @@ class _ExpensesState extends State<Expenses> {
             color: Colors.white70,
           ),
         ),
-        backgroundColor: Colors.teal,
         actions: [
           IconButton(
             onPressed: _openAddExpenseOverLay,
