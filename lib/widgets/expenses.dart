@@ -1,3 +1,4 @@
+import 'package:expenses_tracker_app/widgets/chart/chart.dart';
 import 'package:expenses_tracker_app/widgets/new_expenses.dart';
 import 'package:flutter/material.dart';
 
@@ -100,13 +101,7 @@ class _ExpensesState extends State<Expenses> {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-            child: Text(
-              "The Chart",
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
+            child: Chart(expenses: _registeredExpenses),
           ),
           Expanded(
             child: mainContent,
