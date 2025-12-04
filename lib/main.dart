@@ -15,6 +15,10 @@ void main() {
   runApp(MaterialApp(
     darkTheme: ThemeData.dark().copyWith(
       colorScheme: kDarkColorScheme,
+      appBarTheme: const AppBarTheme().copyWith(
+        backgroundColor: kDarkColorScheme.onPrimaryContainer,
+        foregroundColor: kDarkColorScheme.primaryContainer,
+      ),
       cardTheme: const CardThemeData().copyWith(
         color: kDarkColorScheme.secondaryContainer,
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -43,6 +47,6 @@ void main() {
       ),
     ),
     themeMode: ThemeMode.system,
-    home: Expenses(),
+    home: const Expenses(),
   ));
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../models/expense.dart';
+import '../../core/formatters/currency_formatter.dart';
 
 class ExpenseItem extends StatelessWidget {
   const ExpenseItem({
@@ -29,7 +30,7 @@ class ExpenseItem extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  expense.formatRupiah(expense.amount),
+                  formatRupiah(expense.amount),
                 ),
                 const Spacer(),
                 Row(

@@ -30,14 +30,6 @@ class Expense {
   final Category category;
 
   String get formattedDate => formatter.format(date);
-
-  String formatRupiah(num value) {
-    return NumberFormat.currency(
-      locale: 'id_ID',
-      symbol: 'Rp ',
-      decimalDigits: 0,
-    ).format(value);
-  }
 }
 
 class ExpenseBucket {

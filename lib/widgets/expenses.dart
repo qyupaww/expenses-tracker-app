@@ -3,6 +3,8 @@ import 'package:expenses_tracker_app/widgets/new_expenses.dart';
 import 'package:flutter/material.dart';
 
 import '../models/expense.dart';
+import '../features/expenses/data/in_memory_expenses_repository.dart';
+import '../features/expenses/domain/expenses_repository.dart';
 import 'expenses_list/expenses_list.dart';
 
 class Expenses extends StatefulWidget {
@@ -13,18 +15,24 @@ class Expenses extends StatefulWidget {
 }
 
 class _ExpensesState extends State<Expenses> {
-  final List<Expense> _registeredExpenses = [
-    Expense(
-        title: 'Flutter Course',
-        amount: 109000,
-        date: DateTime.now(),
-        category: Category.others),
-    Expense(
-        title: 'Nasi Padang',
-        amount: 10000,
-        date: DateTime.now(),
-        category: Category.food),
-  ];
+  late final ExpensesRepository _repository;
+
+  @override
+  void initState() {
+    super.initState();
+    _repository = InMemoryExpensesRepository(seed: [
+      Expense(
+          title: 'Flutter Course',
+          amount: 109000,
+          date: DateTime.now(),
+          category: Category.others),
+      Expense(
+          title: 'Nasi Padang',
+          amount: 10000,
+          date: DateTime.now(),
+          category: Category.food),
+    ]);
+  }
 
   void _openAddExpenseOverLay() {
     showModalBottomSheet(
@@ -37,16 +45,15 @@ class _ExpensesState extends State<Expenses> {
   }
 
   void _addExpenses(Expense expense) {
-    setState(() {
-      _registeredExpenses.add(expense);
-    });
+    _repository.add(expense);
+    setState(() {});
   }
 
   void _removeExpense(Expense expense) {
-    final expenseIndex = _registeredExpenses.indexOf(expense);
-    setState(() {
-      _registeredExpenses.remove(expense);
-    });
+    final current = _repository.getAll();
+    final expenseIndex = current.indexOf(expense);
+    _repository.remove(expense);
+    setState(() {});
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -55,9 +62,8 @@ class _ExpensesState extends State<Expenses> {
         action: SnackBarAction(
           label: 'Undo',
           onPressed: () {
-            setState(() {
-              _registeredExpenses.insert(expenseIndex, expense);
-            });
+            _repository.insert(expenseIndex, expense);
+            setState(() {});
           },
         ),
       ),
@@ -70,9 +76,10 @@ class _ExpensesState extends State<Expenses> {
       child: Text('No expenses found'),
     );
 
-    if (_registeredExpenses.isNotEmpty) {
+    final items = _repository.getAll();
+    if (items.isNotEmpty) {
       mainContent = ExpensesList(
-        expenses: _registeredExpenses,
+        expenses: items,
         onRemoveExpense: _removeExpense,
       );
     }
@@ -101,7 +108,7 @@ class _ExpensesState extends State<Expenses> {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-            child: Chart(expenses: _registeredExpenses),
+            child: Chart(expenses: _repository.getAll()),
           ),
           Expanded(
             child: mainContent,
